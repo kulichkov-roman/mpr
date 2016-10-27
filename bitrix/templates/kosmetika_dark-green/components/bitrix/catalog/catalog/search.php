@@ -102,7 +102,7 @@ else
 		"CACHE_FILTER" => "N",
 		"CACHE_GROUPS" => "N",
 
-		"RESTART" => "N",
+		"RESTART" => "Y",
 		"NO_WORD_LOGIC" => "Y",
 		"USE_LANGUAGE_GUESS" => "Y",
 		"CHECK_DATES" => "Y",
