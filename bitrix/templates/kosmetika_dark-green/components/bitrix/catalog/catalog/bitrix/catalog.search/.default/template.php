@@ -45,8 +45,14 @@ if (!empty($arElements) && is_array($arElements))
 		$searchFilter = array(
 			"=ID" => $arElements,
 		);
+
+		if($USER->isAdmin())
+		{
+			$namespace = 'yt';
+		}
+
 		$APPLICATION->IncludeComponent(
-		"bitrix:catalog.section",
+		$namespace.":catalog.section",
 		".default",
 		array(
 			"IBLOCK_TYPE" => $arParams["IBLOCK_TYPE"],
