@@ -46,13 +46,8 @@ if (!empty($arElements) && is_array($arElements))
 			"=ID" => $arElements,
 		);
 
-		if($USER->isAdmin())
-		{
-			$namespace = 'yt';
-		}
-
 		$APPLICATION->IncludeComponent(
-		$namespace.":catalog.section",
+		"yt:catalog.section",
 		".default",
 		array(
 			"IBLOCK_TYPE" => $arParams["IBLOCK_TYPE"],
