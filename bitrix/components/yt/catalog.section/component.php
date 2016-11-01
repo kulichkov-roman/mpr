@@ -819,6 +819,16 @@ if($this->StartResultCache(false, array($arrFilter, ($arParams["CACHE_GROUPS"]==
 	$arMeasureMap = array();
 	$arElementLink = array();
 	$intKey = 0;
+
+	/*
+	 * Сохранить позицию релевантой поисковой выдачи
+	 * */
+	$arSearchItemId = array();
+	foreach ($arrFilter['=ID'] as $id)
+	{
+		$arSearchItemId[] = $id;
+	}
+
 	while($arItem = $rsElements->GetNext())
 	{
 		$arItem['ID'] = (int)$arItem['ID'];
@@ -899,11 +909,33 @@ if($this->StartResultCache(false, array($arrFilter, ($arParams["CACHE_GROUPS"]==
 				$arResult["ITEMS_TIMESTAMP_X"] = $time;
 		}
 
+		/*
+		 * Добавить в массив значение позиции для сохранения релевантности выдачи
+		 * */
+		if(!empty($arSearchItemId) && $arItem["ID"])
+		{
+			$arItem['RANK'] = array_search($arItem["ID"], $arSearchItemId);
+		}
+
 		$arResult["ITEMS"][$intKey] = $arItem;
 		$arResult["ELEMENTS"][$intKey] = $arItem["ID"];
 		$arElementLink[$arItem['ID']] = &$arResult["ITEMS"][$intKey];
 		$intKey++;
 	}
+
+	/*
+	 * Собрать все значения позиций для сохранения релевантности выдачи
+	 * */
+	$arMultiSortById = array();
+	foreach($arResult["ITEMS"] as $arItem)
+	{
+		$arMultiSortById[] = $arItem['RANK'];
+	}
+	/*
+	 * Отфильтровать массив позиций для сохранения релевантности выдачи
+	 * */
+	array_multisort($arMultiSortById, SORT_ASC, $arResult["ITEMS"]);
+
 	$arResult['MODULES'] = $arResultModules;
 
 	$navComponentParameters = array();
